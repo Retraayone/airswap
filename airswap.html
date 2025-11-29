@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirSwap - Clean Air, Earned Rewards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: linear-gradient(135deg, #1a9b8e 0%, #0d6b63 100%);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            opacity: 0.9;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a9b8e 0%, #0d6b63 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Section */
+        .dashboard {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #0d6b63;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #1a9b8e;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #0d6b63;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a9b8e;
+        }
+
+        /* Air Quality Gauge */
+        .gauge-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gauge {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #d4af37 0deg,
+                #ffd700 60deg,
+                #ffa500 120deg,
+                #ff6b6b 180deg,
+                #cc0000 240deg,
+                #990000 300deg,
+                #d4af37 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .gauge-inner {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .gauge-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0d6b63;
+        }
+
+        .gauge-unit {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .gauge-label {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Progress Bars */
+        .progress-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a9b8e, #4ecdc4);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1a9b8e 0%, #0d6b63 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about {
+            background: #f9f9f9;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about h2 {
+            color: #0d6b63;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact h2 {
+            color: #0d6b63;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1a9b8e;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1a9b8e 0%, #0d6b63 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Product Section */
+        .product {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+        }
+
+        .product h2 {
+            text-align: center;
+            color: #0d6b63;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #1a9b8e;
+        }
+
+        .feature h3 {
+            color: #0d6b63;
+            margin-bottom: 1rem;
+        }
+
+        .buy-btn {
+            display: block;
+            max-width: 300px;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #1a9b8e 0%, #0d6b63 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: #0d6b63;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li class="nav-logo">AirSwap</li>
+            <li><a href="#" onclick="showSection('home')">Home</a></li>
+            <li><a href="#" onclick="showSection('about')">About</a></li>
+            <li><a href="#" onclick="showSection('product')">Product</a></li>
+            <li><a href="#" onclick="showSection('contact')">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <div id="home" class="section active">
+        <div class="hero">
+            <h1>AirSwap</h1>
+            <p>Breathe Clean, Earn Rewards</p>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <h2 class="dashboard-title">Your Air Quality Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <!-- Air Quality Card -->
+                <div class="card">
+                    <h3 class="card-title">Current Air Quality</h3>
+                    <div class="gauge-container">
+                        <div class="gauge">
+                            <div class="gauge-inner">
+                                <div>
+                                    <div class="gauge-value">65</div>
+                                    <div class="gauge-unit">AQI</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gauge-label">Moderate (Good)</div>
+                    </div>
+                </div>
+
+                <!-- Air Purified Card -->
+                <div class="card">
+                    <h3 class="card-title">Air Purified Today</h3>
+                    <div class="card-content">
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span>PM2.5 Filtered</span>
+                                <span>2.4 mg</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span>PM10 Filtered</span>
+                                <span>5.8 mg</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span>VOC Neutralized</span>
+                                <span>1.2 mg</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AirPoints Card -->
+                <div class="card">
+                    <h3 class="card-title">Your AirPoints</h3>
+                    <div class="card-content">
+                        <div class="metric">
+                            <span class="metric-label">Points Today</span>
+                            <span class="metric-value">125</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Points This Week</span>
+                            <span class="metric-value">892</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Total Points</span>
+                            <span class="metric-value">3,540</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Rank</span>
+                            <span class="metric-value">#42</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Air Quality Level</div>
+                    <div class="stat-number">GOOD</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Hours Filtering</div>
+                    <div class="stat-number">18.5</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Monthly Target</div>
+                    <div class="stat-number">87%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="section">
+        <div class="about">
+            <div class="about-content">
+                <h2>About AirSwap</h2>
+                <p>AirSwap is an innovative eco-technology startup dedicated to combating air pollution through smart IoT devices and community-based incentives.</p>
+                <p>We transform regular household fans and AC units into intelligent air cleaners that monitor air quality and reward users with AirPoints for every bit of clean air they help produce.</p>
+                <p>Our mission is to empower individuals and communities to take action against air pollution while making sustainable living rewarding and engaging.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <div id="product" class="section">
+        <div class="product">
+            <h2>Our Product</h2>
+            
+            <div class="product-features">
+                <div class="feature">
+                    <h3>🔧 Smart Filter Technology</h3>
+                    <p>Advanced removable eco-filter that fits any standard fan or AC unit, capturing dust and pollutants efficiently.</p>
+                </div>
+                <div class="feature">
+                    <h3>📊 Air Quality Monitoring</h3>
+                    <p>Built-in sensors track PM2.5, CO2, and VOC levels in real-time for accurate air quality assessment.</p>
+                </div>
+                <div class="feature">
+                    <h3>📱 Mobile App Integration</h3>
+                    <p>Bluetooth-enabled connectivity syncs your filter with our app to track purification and earn rewards.</p>
+                </div>
+                <div class="feature">
+                    <h3>💰 AirPoints Rewards</h3>
+                    <p>Convert your cleaning efforts into AirPoints redeemable for grocery discounts, shopping vouchers, or utility bill payments.</p>
+                </div>
+                <div class="feature">
+                    <h3>🏆 Clean Air Challenge</h3>
+                    <p>Compete monthly with peers in our community challenges and win exclusive prizes while improving air quality.</p>
+                </div>
+                <div class="feature">
+                    <h3>💚 Eco-Friendly Design</h3>
+                    <p>Made with sustainable materials, our product reduces waste while promoting environmental responsibility.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <h3 style="color: #0d6b63; margin-bottom: 1rem;">Price: Rs. 2,200 per unit</h3>
+                <button class="buy-btn">Purchase Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="section">
+        <div class="contact">
+            <h2>Contact Us</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 AirSwap. All rights reserved. | Breathe Clean, Earn Rewards</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
